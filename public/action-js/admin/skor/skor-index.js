@@ -75,7 +75,7 @@ $(document).ready(function(){
   $('#nav-menu li#menu-skor').addClass('active');
 
   $('#all-kegiatan').DataTable();
-  
+
   if($('#isRole').val() == '200'){
     loadparam('data_kegiatan');
     loadmaster();
@@ -173,7 +173,7 @@ function loadmaster(param){
                 { 'mDataProp': 'nama_ro'},
                 { 'mDataProp': 'nama_rc'},
                 { 'mDataProp': 'skor'},
-                { 'mDataProp': 'id'},
+                { 'mDataProp': 'id', 'className' : 'text-center'},
             ],
             order: [[0, 'ASC']],
             
