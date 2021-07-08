@@ -256,6 +256,17 @@ function loadmaster(param){
             }
           });
 
+          var child = $(table.table().header()).children();
+          if(child.length > 1){
+            $(child[1]).remove();
+            $(table.columns(0).header()).removeAttr('rowspan');
+            $(table.columns(1).header()).removeAttr('rowspan');
+            $(table.columns(2).header()).removeAttr('rowspan');
+            $(table.columns(3).header()).removeAttr('colspan');
+            $(table.columns(4).header()).removeAttr('rowspan');
+          }
+          // table.clear().draw();
+
           $(table.table().header()).append(`<tr>
             <th class="text-center">Nama RC</th>
             <th class="text-center">Skor</th>
@@ -350,7 +361,8 @@ function save(formData){
           confirmButtonText: `Ok`,
         }).then((result) => {
           $(document).ready(function(){
-            location.reload();
+            // location.reload();
+            loadmaster();
           });
         })
       }
@@ -374,7 +386,8 @@ function updateskor(formData){
           confirmButtonText: `Ok`,
         }).then((result) => {
           $(document).ready(function(){
-            location.reload();
+            // location.reload();
+            loadmaster($('option:selected', this).val());
           });
         })
       }
