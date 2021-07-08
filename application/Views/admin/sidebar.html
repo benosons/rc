@@ -18,57 +18,8 @@
 
 						<b class="arrow"></b>
 					</li>
-					{% if role == '100' or role == '10' %}
-					<li id="menu-data" class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-folder-open"></i>
-							<span class="menu-text"> Data </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-
-							<li id="menu-program" class="">
-								<a href="program">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Program
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li id="menu-kegiatan" class="">
-								<a href="kegiatan">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Kegiatan
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li id="menu-subkegiatan" class="">
-								<a href="subkegiatan">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Sub Kegiatan
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li id="menu-paket" class="">
-								<a href="paket">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Paket
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-						</ul>
-					</li>
+					{% if role == '100' or role == '200' %}
+					
 
           			<li id="menu-skor" class="">
 						<a href="skor">
@@ -80,8 +31,8 @@
 					</li>
          
 					{% endif %}
-
-          <li id="menu-users" class="">
+					{% if role == '100' %}
+          			<li id="menu-users" class="">
 						<a href="users">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text"> User </span>
@@ -89,7 +40,7 @@
 
 						<b class="arrow"></b>
 					</li>
-
+					{% endif %}
 				</ul><!-- /.nav-list -->
 
 				<!-- #section:basics/sidebar.layout.minimize -->

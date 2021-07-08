@@ -43,10 +43,10 @@
       <div class="widget-box">
         <div class="widget-header">
 					<div class="widget-toolbar no-border">
-						<button class="btn btn-xs btn-primary bigger" data-toggle="modal" data-target="#modal_user">
+						<!-- <button class="btn btn-xs btn-primary bigger" data-toggle="modal" data-target="#modal_user">
 							<i class="ace-icon fa fa-plus"></i>
 							Add User
-						</button>
+						</button> -->
 					</div>
 				</div>
         <div class="widget-body">
@@ -56,10 +56,8 @@
                   <thead>
                       <tr>
                           <th style="width:10%;">No</th>
-                          <th>Username</th>
                           <th>Nama</th>
-                          <th>NIP</th>
-                          <th>Role</th>
+                          <th>Kabupaten/Kota</th>
                           <th>Status</th>
                           <th>Login</th>
                           <th>Action</th>
@@ -104,24 +102,13 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="user_fullname"> NIP </label>
-
-						<div class="col-sm-9">
-							<input type="text" id="user_nip" placeholder="NIP" class="form-control">
-						</div>
-					</div>
-
-					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="user_role"> Role Level </label>
 
 						<div class="col-sm-9">
 						  	<select class="chosen-select form-control" id="user_role" data-placeholder="select role...">
 						  		<option value="">  </option>
-						  		<option value="10">admin</option>
-						  		<option value="20">operator</option>
-						  		<option value="30">ppk</option>
-						  		<option value="40">pptk</option>
-
+						  		<option value="100">admin</option>
+						  		<option value="200">user</option>
 						  	</select>
 						</div>
 					</div>

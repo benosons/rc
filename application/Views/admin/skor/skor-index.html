@@ -43,15 +43,32 @@
     <div class="col-xs-12 widget-container-col" >
       <div class="widget-box">
         <div class="widget-header">
+          <input type="hidden" id="isRole" value="{{role}}">
 					<div class="widget-toolbar no-border">
+            {% if role == '200' %}
 						<button class="btn btn-xs btn-inverse bigger btn-modal" data-toggle="modal" data-target="#modal_kegiatan">
 							<i class="ace-icon fa fa-plus"></i>
 							Add Kegiatan
 						</button>
+            {% endif %}
 					</div>
 				</div>
         <div class="widget-body">
           <div class="widget-main">
+            {% if role == '100' %}
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kabupaten/ Kota </label>
+                  <div class="col-sm-9">
+                    <select class="chosen-select form-control" id="kab_kota" data-placeholder="Select kabupaten/kota...">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            
             <div class="table-responsive">
             <table id="all-kegiatan" class="table table-striped table-bordered nowrap table-responsive">
                 <thead>
@@ -214,13 +231,22 @@
                 <span class="editable editable-click"><input type="number" id="skor" placeholder="" class="col-xs-10 col-sm-5"></span>
               </div>
             </div>
+            <div class="profile-info-row">
+              <div class="profile-info-name"> Keterangan </div>
+
+              <div class="profile-info-value">
+                <span class="editable editable-click"><textarea id="keterangan" class="form-control" style="resize:none;"></textarea></span>
+              </div>
+            </div>
           </div>
 
 				</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><i class="ace-icon fa fa-close"></i>close</button>
+        {% if role == '100' %}
         <button type="button" id="save_skor" class="btn btn-xs btn-success" data-dismiss="modal"><i class="ace-icon fa fa-check"></i>submit</button>
+        {% endif %}
       </div>
     </div>
 

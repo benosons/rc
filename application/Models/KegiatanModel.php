@@ -9,8 +9,9 @@ class KegiatanModel extends Model{
     protected $createdField  = 'create_date';
     protected $updatedField  = 'update_date';
 
-    public function getKegiatan($code = null)
+    public function getKegiatan($code = null, $userid = null, $kota = null)
     {
+        
           $builder = $this->db->table('data_master mas');
           $builder->select('mas.*, 
                             ke.name as nama_kegiatan, 
@@ -33,12 +34,16 @@ class KegiatanModel extends Model{
           $builder->join('data_ro ro', 'ro.id = mas.id_ro');
           $builder->join('data_rc rc', 'rc.id = mas.id_rc');
           $builder->join('data_file fl', 'fl.id_parent = mas.id');
-
-          if($code){
-            $query   = $builder->getWhere(['kode_program' => $code]);
+          
+          if($code == 'user'){
+            $query   = $builder->getWhere(['kabupaten_kota' => $kota, 'mas.create_by' => $userid]);
+          }else if($code == 'admin'){
+            $query   = $builder->getWhere(['kabupaten_kota' => $kota]);
           }else{
             $query   = $builder->get();
           }
+                    // echo $this->db->getLastQuery();die;
+
           return  $query->getResult();
     }
 

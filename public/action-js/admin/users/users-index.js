@@ -88,30 +88,20 @@ function loadusers(param){
             info: true,
             autoWidth: false,
             responsive: false,
-            pageLength: 10,
+            pageLength: 15,
             aaData: result.data,
             aoColumns: [
                 { 'mDataProp': 'user_id', 'width':'10%'},
                 { 'mDataProp': 'user_name'},
-                { 'mDataProp': 'user_fullname'},
-                { 'mDataProp': 'nip'},
-                { 'mDataProp': 'role_name'},
+                { 'mDataProp': 'kab_kota'},
                 { 'mDataProp': 'user_status'},
                 { 'mDataProp': 'user_status'},
             ],
-            order: [[0, 'ASC']],
+            // order: [[0, 'ASC']],
             fixedColumns: true,
             aoColumnDefs:[
               { width: 50, targets: 0 },
-              {
-                  mRender: function ( data, type, row ) {
-                      if(!data){
-                        data = '<center>-</center>';
-                      }
-                      return data;
-                  },
-                  aTargets: [ 4 ]
-              },
+              
               {
                   mRender: function ( data, type, row ) {
 
@@ -125,7 +115,7 @@ function loadusers(param){
 
                       return el;
                   },
-                  aTargets: [ 5 ]
+                  aTargets: [ 3 ]
               },
               {
                   mRender: function ( data, type, row ) {
@@ -139,7 +129,7 @@ function loadusers(param){
 
                       return el;
                   },
-                  aTargets: [ 6 ]
+                  aTargets: [ 4 ]
               },
               {
                   mRender: function ( data, type, row ) {
@@ -150,7 +140,7 @@ function loadusers(param){
 
                       return el;
                   },
-                  aTargets: [ 7 ]
+                  aTargets: [ 5 ]
               },
             ],
             fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull){

@@ -5,16 +5,18 @@ use CodeIgniter\Model;
 class UserModel extends Model{
     protected $table = 'users';
     protected $primaryKey = 'user_id';
-    protected $allowedFields = ['user_name','user_email','user_password','user_created_at', 'user_role', 'user_fullname', 'user_status', 'isLogin', 'update_by', 'update_date', 'user_satuan', 'nip'];
+    protected $allowedFields = ['user_name','user_email','user_password','user_created_at', 'user_role', 'user_fullname', 'user_status', 'isLogin', 'update_by', 'update_date', 'kabupaten_kota'];
 
     public function getUsers($id = null)
     {
       $this->join('users_role', 'users_role.role_id = users.user_role', 'LEFT');
-      $this->select('*');
+      $this->select('users.*, kabupaten_kota.name as kab_kota');
+      $this->join('kabupaten_kota', 'kabupaten_kota.id = users.kabupaten_kota');
+      $this->orderBy('users.kabupaten_kota', 'asc');
       $this->whereNotIn('user_id', $id);
       $result = $this->findAll();
 
-      // echo $this->db->getLastQuery();
+      // echo $this->db->getLastQuery();die;
 
       return $result;
     }

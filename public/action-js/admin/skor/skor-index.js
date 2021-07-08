@@ -74,8 +74,18 @@ $(document).ready(function(){
   $('#nav-menu li').removeClass();
   $('#nav-menu li#menu-skor').addClass('active');
 
-  loadparam('data_kegiatan');
-  loadmaster();
+  $('#all-kegiatan').DataTable();
+  
+  if($('#isRole').val() == '200'){
+    loadparam('data_kegiatan');
+    loadmaster();
+  }else{
+    loadparam('kabupaten_kota');
+  }
+
+  $('#kab_kota').chosen().on('change', () => {
+    loadmaster($('option:selected', this).val());
+  })
   // $('#all-kegiatan').DataTable();
   window.file = []
   $('#save_kegiatan').on('click', function(){
@@ -101,11 +111,13 @@ $(document).ready(function(){
   $('#save_skor').on('click', function(){
       var id_master = $('#id_master').val();
       var skor = $('#skor').val();
+      var keterangan = $('#keterangan').val();
       
       var formData = new FormData();
       formData.append('param', 'data_master');
       formData.append('id_master', id_master);
       formData.append('skor', skor);
+      formData.append('keterangan', keterangan);
       
       updateskor(formData);
   });
@@ -142,8 +154,8 @@ function loadmaster(param){
               param      : param,
       },
       success: function(result){
-          let data = result.data;
-          
+          let code = result.code;
+        if(code == '1'){
           var table = $('#all-kegiatan').DataTable({
             destroy: true,
             paging: true,
@@ -198,7 +210,7 @@ function loadmaster(param){
               {
                   mRender: function ( data, type, row ) {
 
-                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
+                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
 
                       return el;
                   },
@@ -242,18 +254,31 @@ function loadmaster(param){
                     tr = this;
                 });
             }
-        });
+          });
 
-        $(table.table().header()).append(`<tr>
-          <th class="text-center">Nama RC</th>
-          <th class="text-center">Skor</th>
-        </tr>`)
+          $(table.table().header()).append(`<tr>
+            <th class="text-center">Nama RC</th>
+            <th class="text-center">Skor</th>
+          </tr>`)
 
-        $(table.columns(0).header()).attr('rowspan', 2)
-        $(table.columns(1).header()).attr('rowspan', 2)
-        $(table.columns(2).header()).attr('rowspan', 2)
-        $(table.columns(3).header()).attr('colspan', 2)
-        $(table.columns(4).header()).attr('rowspan', 2)
+          $(table.columns(0).header()).attr('rowspan', 2);
+          $(table.columns(1).header()).attr('rowspan', 2);
+          $(table.columns(2).header()).attr('rowspan', 2);
+          $(table.columns(3).header()).attr('colspan', 2);
+          $(table.columns(4).header()).attr('rowspan', 2);
+        }else{
+          var table = $('#all-kegiatan').DataTable();
+          var child = $(table.table().header()).children();
+          if(child.length > 1){
+            $(child[1]).remove();
+            $(table.columns(0).header()).removeAttr('rowspan');
+            $(table.columns(1).header()).removeAttr('rowspan');
+            $(table.columns(2).header()).removeAttr('rowspan');
+            $(table.columns(3).header()).removeAttr('colspan');
+            $(table.columns(4).header()).removeAttr('rowspan');
+          }
+          table.clear().draw();
+        }
 
         }
       })
@@ -296,6 +321,12 @@ function loadparam(param, id){
             }
             $('#data_rc').append(el);
             $('#data_rc').trigger("chosen:updated");
+          }else if(param == 'kabupaten_kota'){
+            for (var i = 0; i < data.length; i++) {
+              el += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+            }
+            $('#kab_kota').append(el);
+            $('#kab_kota').trigger("chosen:updated");
           }
 
         }
@@ -350,12 +381,14 @@ function updateskor(formData){
     });
   };
 
-  function skor(id, skor,  filename, path, size){
+  function skor(id, skor,  filename, path, size, keterangan){
     $('#id_master').val(id);
     $('#skor').val(skor);
     $('#filename').html(filename);
     $('#size').html('<code>'+bytesToSize(size)+'</code>');
     $('#download').attr('href', 'public/'+path+'/'+filename);
+
+    $('#keterangan').val(keterangan=='null'?'':keterangan);
   };
 
   function bytesToSize(bytes) {

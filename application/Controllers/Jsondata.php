@@ -12,7 +12,7 @@ class Jsondata extends \CodeIgniter\Controller
       $this->session = session();
 			$this->now = date('Y-m-d H:i:s');
 			$this->request = $request;
-      $this->logged = $this->session->get('logged_in');
+      		$this->logged = $this->session->get('logged_in');
 			$this->data = array(
 				'version' => \CodeIgniter\CodeIgniter::CI_VERSION,
 				'baseURL' => BASE.'/public',
@@ -20,8 +20,7 @@ class Jsondata extends \CodeIgniter\Controller
 				'userid' => $this->session->get('user_id'),
 				'username' => $this->session->get('user_name'),
 				'role' => $this->session->get('user_role'),
-				'satuan' => $this->session->get('user_satuan'),
-				'nip' => $this->session->get('nip'),
+				'kabupaten_kota' => $this->session->get('kabupaten_kota'),
 			);
   }
 
@@ -31,7 +30,7 @@ class Jsondata extends \CodeIgniter\Controller
 		{
 				$request  = $this->request;
 				$param 	  = $request->getVar('param');
-				$id		 	  = $request->getVar('id');
+				$id		  = $request->getVar('id');
 				$role 		= $this->data['role'];
 				$userid		= $this->data['userid'];
 				$user_satuan		= $this->data['satuan'];
@@ -394,17 +393,27 @@ class Jsondata extends \CodeIgniter\Controller
 		{
 				$request  = $this->request;
 				$param 	  = $request->getVar('param');
-				$id		 	  = $request->getVar('id');
+				$id		  = $request->getVar('id');
 				$role 		= $this->data['role'];
 				$userid		= $this->data['userid'];
 				$code 		= $request->getVar('code');
+				
+				if($role == '200'){
+					$code = 'user';
+					$kota = $this->data['kabupaten_kota'];
+				}else{
+					$code 		= 'admin';
+					$kota 		= $param;
+					$userid		= null;
+				}
 
+				
 					$model = new \App\Models\KegiatanModel();
 					$modelparam = new \App\Models\ParamModel();
 					$modelfiles = new \App\Models\FilesModel();
 
 						$fulldata = [];
-						$datakegiatan = $model->getKegiatan($code);
+						$datakegiatan = $model->getKegiatan($code, $userid, $kota);
 
 					if($datakegiatan){
 						$response = [
@@ -1068,11 +1077,12 @@ class Jsondata extends \CodeIgniter\Controller
 				$id		 	  = $request->getVar('id');
 				$role 		= $this->data['role'];
 				$userid		= $this->data['userid'];
-
+				$kota		= $this->data['kabupaten_kota'];
+				
 					$model = new \App\Models\ParamModel();
 					$modelfiles = new \App\Models\FilesModel();
 
-					$data = $model->getparam($param, $id);
+					$data = $model->getparam($param, $id, $kota);
 
 					if($data){
 						$response = [
@@ -1553,28 +1563,25 @@ class Jsondata extends \CodeIgniter\Controller
 
 	public function udpateSkor(){
 
-		$request  = $this->request;
-		$param 	  = $request->getVar('param');
+		$request  	= $this->request;
+		$param 	  	= $request->getVar('param');
 		$id 	  	= $request->getVar('id_master');
 		$skor 		= $request->getVar('skor');
+		$keterangan	= $request->getVar('keterangan');
 		
 		$role 		= $this->data['role'];
 		$userid		= $this->data['userid'];
 
-		$model 	  = new \App\Models\KegiatanModel();
+		$model 	  	= new \App\Models\KegiatanModel();
 
 		$data = [
 				'update_date' 	=> $this->now,
 				'update_by' 	=> $userid,
 				'skor' 			=> $skor,
+				'keterangan' 	=> $keterangan,
         ];
 
-		// if($mode == 'update'){
-			$res = $model->update($param, $id, $data);
-
-		// }else{
-		// 	$res = $model->delete(['user_id' => $id]);
-		// }
+		$res = $model->update($param, $id, $data);
 
 		$response = [
 				'status'   => 'sukses',
@@ -2259,8 +2266,7 @@ class Jsondata extends \CodeIgniter\Controller
 
 						foreach ($datauser as $keyuser => $valueuser) {
 							$datafiles = $modelfiles->getWhere(['id_parent' => $valueuser['user_id']])->getRow();
-							$datasatuan= $model->getSatuanByCode($valueuser['user_satuan']);
-							$obj_merged = (object) array_merge((array) $valueuser, (array) $datafiles, (array) $datasatuan);
+							$obj_merged = (object) array_merge((array) $valueuser, (array) $datafiles);
 							array_push($fulldata, $obj_merged);
 						}
 						$users = $fulldata;
