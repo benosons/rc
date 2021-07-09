@@ -1081,7 +1081,7 @@ class Jsondata extends \CodeIgniter\Controller
 				
 					$model = new \App\Models\ParamModel();
 					$modelfiles = new \App\Models\FilesModel();
-
+					
 					$data = $model->getparam($param, $id, $kota);
 
 					if($data){

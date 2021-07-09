@@ -131,15 +131,16 @@ $(document).ready(function(){
   });
 
   $('#data_kegiatan').chosen().on('change', () => {
-      loadparam('data_kro', $('option:selected', this).val());
+    // $('option:selected', this).val()
+      loadparam('data_kro', $("#data_kegiatan").val());
   })
 
   $('#data_kro').chosen().on('change', () => {
-      loadparam('data_ro', $('option:selected', this).val());
+      loadparam('data_ro', $('data_kro').val());
   })
 
   $('#data_ro').chosen().on('change', () => {
-      loadparam('data_rc', $('option:selected', this).val());
+      loadparam('data_rc', $('data_ro').val());
   })
 
 });
