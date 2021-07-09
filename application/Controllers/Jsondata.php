@@ -1505,6 +1505,7 @@ class Jsondata extends \CodeIgniter\Controller
 		$param 	  = $request->getVar('param');
 		$role 	  = $this->data['role'];
 		$userid	  = $this->data['userid'];
+		$kabupaten_kota	  = $this->data['kabupaten_kota'];
 
 		$model 	  = new \App\Models\KegiatanModel();
 		$modelfiles = new \App\Models\FilesModel();
@@ -1521,8 +1522,9 @@ class Jsondata extends \CodeIgniter\Controller
 					'id_ro' 		=> $request->getVar('id_ro'),
 					'id_rc' 		=> $request->getVar('id_rc'),
 					'create_date'	=> $this->now,
-					'create_by'	=> $userid,
+					'create_by'		=> $userid,
 					'update_date'	=> $this->now,
+					'kabupaten_kota'=> $kabupaten_kota
 				];
 
 		$res = $model->saveParam($param, $data);

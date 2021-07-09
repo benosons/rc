@@ -84,7 +84,7 @@ $(document).ready(function(){
   }
 
   $('#kab_kota').chosen().on('change', () => {
-    loadmaster($('option:selected', this).val());
+    loadmaster($('#kab_kota').val());
   })
   // $('#all-kegiatan').DataTable();
   window.file = []
@@ -388,7 +388,7 @@ function updateskor(formData){
         }).then((result) => {
           $(document).ready(function(){
             // location.reload();
-            loadmaster($('option:selected', this).val());
+            loadmaster($('#kab_kota').val());
           });
         })
       }

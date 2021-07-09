@@ -19,6 +19,9 @@ class ParamModel extends Model{
             $query   = $builder->getWhere(['id_parent' => $id]);
             
           }else{
+            if($table == 'kabupaten_kota'){
+              $builder->where('id in (select kabupaten_kota from data_master where kabupaten_kota = kabupaten_kota.id)');
+            }
             $query   = $builder->get();
           }
           // echo $this->db->getLastQuery();die;
