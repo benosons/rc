@@ -199,10 +199,19 @@
               <div class="profile-info-name"> FIlename </div>
 
               <div class="profile-info-value">
+
+                <div class="form-group" id="group-upload-edit">
+                  <div class="col-lg-12">
+                    <input id="data_upload_edit" multiple="multiple" accept=".pdf,.xls,.xlxs,.doc,.docx" type="file" class="file-input" data-show-caption="false" data-show-upload="false" data-browse-class="btn btn-primary btn-xs" data-remove-class="btn btn-default btn-xs">
+                  </div>
+                </div>
+
                 <i class="fa fa-file light-orange bigger-110"></i>
                 <span class="editable editable-click" id="filename"> </span>
               </div>
+              
             </div>
+            
 
             <div class="profile-info-row">
               <div class="profile-info-name"> Size </div>
@@ -223,6 +232,42 @@
                 </span>
               </div>
             </div>
+            <div class="profile-info-row">
+              <div class="profile-info-name"> Status </div>
+              {% if role == 100 %}
+              <div class="profile-info-value">
+                <div class="control-group">
+                  <div class="radio">
+                    <label>
+                      <input name="status" id="st_1" type="radio" class="ace" value="1">
+                      <span class="lbl text-success"> Valid </span>
+                    </label>
+                  </div>
+
+                  <div class="radio">
+                    <label>
+                      <input name="status" id="st_2" type="radio" class="ace" value="2">
+                      <span class="lbl text-danger"> Tidak Valid </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {% else  %}
+              <div class="profile-info-value">
+                <span class="editable editable-click" id="stat"><span class="label label-sm label-success arrowed-in"> Data Valid </span></span>
+              </div>
+              {% endif %}
+            </div>
+
+            {% if role != 100 %}
+            <div class="profile-info-row" id="duedate">
+              <div class="profile-info-name" > Batas Waktu </div>
+
+              <div class="profile-info-value">
+                <span class="editable editable-click" id="demo"></span>
+              </div>
+            </div>
+            {% endif %}
 
             <div class="profile-info-row">
               <div class="profile-info-name"> Skor </div>
@@ -231,13 +276,23 @@
                 <span class="editable editable-click"><input type="number" id="skor" placeholder="" class="col-xs-10 col-sm-5"></span>
               </div>
             </div>
-            <div class="profile-info-row">
-              <div class="profile-info-name"> Keterangan </div>
+            <div class="profile-info-row" id="ket_admin">
+              <div class="profile-info-name"> Keterangan Admin </div>
 
               <div class="profile-info-value">
                 <span class="editable editable-click"><textarea id="keterangan" class="form-control" style="resize:none;"></textarea></span>
               </div>
             </div>
+            {% if role != 100 %}
+            <div class="profile-info-row" id="ket_user">
+              <div class="profile-info-name"> Keterangan User </div>
+
+              <div class="profile-info-value">
+                <span class="editable editable-click"><textarea id="keterangan_user" class="form-control" style="resize:none;"></textarea></span>
+              </div>
+            </div>
+            {% endif %}
+
           </div>
 
 				</form>
@@ -246,6 +301,8 @@
         <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><i class="ace-icon fa fa-close"></i>close</button>
         {% if role == '100' %}
         <button type="button" id="save_skor" class="btn btn-xs btn-success" data-dismiss="modal"><i class="ace-icon fa fa-check"></i>submit</button>
+        {% else %}
+        <button type="button" id="update_user" class="btn btn-xs btn-success" data-dismiss="modal"><i class="ace-icon fa fa-check"></i>submit</button>
         {% endif %}
       </div>
     </div>

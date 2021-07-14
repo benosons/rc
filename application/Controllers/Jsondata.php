@@ -1570,18 +1570,80 @@ class Jsondata extends \CodeIgniter\Controller
 		$id 	  	= $request->getVar('id_master');
 		$skor 		= $request->getVar('skor');
 		$keterangan	= $request->getVar('keterangan');
+		$status		= $request->getVar('status');
+		$keterangan_user	= $request->getVar('keterangan_user');
+		$path_delete		= $request->getVar('path_delete');
+		
 		
 		$role 		= $this->data['role'];
 		$userid		= $this->data['userid'];
 
 		$model 	  	= new \App\Models\KegiatanModel();
+		$modelfiles = new \App\Models\FilesModel();
 
-		$data = [
+		if($role == '100'){
+			$data = [
+					'update_date' 	=> $this->now,
+					'update_by' 	=> $userid,
+					'skor' 			=> $skor,
+					'keterangan' 	=> $keterangan,
+					'status' 		=> $status,
+			];
+
+			if($status == '2'){
+				$date = strtotime($this->now);
+				$date = strtotime("+7 day", $date);
+				$due  = date('Y-m-d H:i:s', $date);
+				$data['due_date'] = $due;
+			}else{
+				$data['due_date'] = null;
+			}
+
+			
+
+		}else{
+
+			$files	  	= $request->getFiles()['file'];
+
+			$data = [
 				'update_date' 	=> $this->now,
-				'update_by' 	=> $userid,
-				'skor' 			=> $skor,
-				'keterangan' 	=> $keterangan,
-        ];
+				'keterangan_user' 	=> $keterangan_user,
+				'status' 		=> 3,
+				'due_date' => null
+			];
+					
+			$path		= FCPATH.'public';
+			$tipe		= 'uploads/data';
+			$date 		= date('Y/m/d');
+			$folder		= $path.'/'.$tipe.'/'.$date.'/'.$userid;
+			
+			if (file_exists($path_delete)){
+				if(unlink($path_delete)){
+
+					if (!is_dir($folder)) {
+						mkdir($folder, 0777, TRUE);
+					}
+
+					foreach($files as $idx => $fl){
+									
+						$stat = $fl->move($folder, $fl->getName());
+						
+						$data_file = [
+							'id_parent' => $id,
+							'filename' => $fl->getName(),
+							'type' => null,
+							'size' => $fl->getSize(),
+							'path' => $tipe.'/'.$date.'/'.$userid,
+							'create_date' => $this->now,
+							'create_by' => $userid
+						];
+
+						$modelfiles->updateFile($id, $data_file);
+					}
+				}
+			}
+		}
+
 
 		$res = $model->update($param, $id, $data);
 

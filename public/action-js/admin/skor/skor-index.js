@@ -71,6 +71,28 @@ $(document).ready(function(){
     });
   })
 
+  $('#modal_skor').on('shown.bs.modal', function (e) {
+    $('.file-input').fileinput({
+        browseLabel: 'Pilih File',
+        removeLabel: 'Hapus',
+        showUpload : false,
+        showRemove : true,
+        showZoom: false,
+        browseIcon: '<i class="icon-file-plus"></i>',
+        removeIcon: '<i class="icon-trash"></i>',
+        layoutTemplates: {
+            icon: '<i class="icon-file-check"></i>',
+            modal: modalTemplate
+        },
+        initialCaption: "No file selected",
+        previewZoomButtonClasses: previewZoomButtonClasses,
+        previewZoomButtonIcons: previewZoomButtonIcons,
+        fileActionSettings: fileActionSettings
+    });
+  })
+
+  $('#group-upload-edit').css('display', 'none');
+
   $('#nav-menu li').removeClass();
   $('#nav-menu li#menu-skor').addClass('active');
 
@@ -83,11 +105,17 @@ $(document).ready(function(){
     loadparam('kabupaten_kota');
   }
 
-  $('#kab_kota').chosen().on('change', () => {
+  $('#kab_kota').chosen().on('change', function(){
     loadmaster($('#kab_kota').val());
+  })
+
+  $('input[name="status"]').on('click', function(){
+    $(this).attr('checked');
   })
   // $('#all-kegiatan').DataTable();
   window.file = []
+  window.file_edit = []
+
   $('#save_kegiatan').on('click', function(){
       var id_kegiatan = $('#data_kegiatan').val();
       var id_kro = $('#data_kro').val();
@@ -112,22 +140,49 @@ $(document).ready(function(){
       var id_master = $('#id_master').val();
       var skor = $('#skor').val();
       var keterangan = $('#keterangan').val();
+      var status = $('[name="status"]:checked').val();
       
       var formData = new FormData();
       formData.append('param', 'data_master');
       formData.append('id_master', id_master);
       formData.append('skor', skor);
       formData.append('keterangan', keterangan);
+      formData.append('status', status);
       
       updateskor(formData);
   });
+
+  $('#update_user').on('click', function(){
+    var id_master = $('#id_master').val();
+    var keterangan_user = $('#keterangan_user').val();
+    var path_delete = $('#download').attr('href');
+    
+    var formData = new FormData();
+    formData.append('param', 'data_master');
+    formData.append('id_master', id_master);
+    formData.append('keterangan_user', keterangan_user);
+    formData.append('path_delete', path_delete);
+
+    for (let i = 0; i < window.file_edit.length; i++) {
+      formData.append('file[]', window.file_edit[i]);
+    }
+    
+    updateskor(formData);
+});
 
   $('#data_upload').on('fileloaded', function(event, file, previewId, fileId, index, reader) {      
       window.file.push(file);
   });
 
+  $('#data_upload_edit').on('fileloaded', function(event, file, previewId, fileId, index, reader) {      
+    window.file_edit.push(file);
+  });
+
   $('#data_upload').on('filecleared', function(event) {
       window.file = [];
+  });
+  $('#data_upload_edit').on('filecleared', function(event) {
+      window.file_edit = [];
   });
 
   $('#data_kegiatan').chosen().on('change', () => {
@@ -211,7 +266,7 @@ function loadmaster(param){
               {
                   mRender: function ( data, type, row ) {
 
-                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
+                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
 
                       return el;
                   },
@@ -395,14 +450,134 @@ function updateskor(formData){
     });
   };
 
-  function skor(id, skor,  filename, path, size, keterangan){
+  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate){
     $('#id_master').val(id);
-    $('#skor').val(skor);
+    if($('#isRole').val() == '200'){
+      $('input#skor').replaceWith('<span>'+skor+'</span>');
+      $('#keterangan').replaceWith('<span id="keterangan" value="">'+keterangan+'</span>');
+    }else{
+      $('#skor').val(skor);
+      $('#keterangan').val( keterangan=='null' ? '' :keterangan );
+      $('#filename').nextAll().remove();
+    }
+
     $('#filename').html(filename);
     $('#size').html('<code>'+bytesToSize(size)+'</code>');
     $('#download').attr('href', 'public/'+path+'/'+filename);
+    $('#delete-file').attr('href', 'public/'+path+'/'+filename);
 
-    $('#keterangan').val(keterangan=='null'?'':keterangan);
+    if($('#isRole').val() == '200'){
+        if(duedate == 'null'){
+          $('#duedate').css('display', 'none');
+        }else{
+          $('#duedate').removeAttr('style');
+        }
+
+      $('.fileinput-remove').trigger('click');
+      $('#group-upload-edit').css('display', 'none');
+      
+      var st = '';
+      window.x ;
+
+      if( keterangan == 'null' || keterangan == '' || keterangan == null ){
+        
+        $('#ket_admin').css('display', 'none');
+      }else{
+        $('#ket_admin').show();
+      }
+
+      if(keterangan_user == 'null' || keterangan_user == null || keterangan_user == '' ){
+        $('#ket_user').css('display', 'none');
+      }else{
+        $('#ket_user').show();
+      }
+    }
+
+    if($('#isRole').val() == '200'){
+      if(status){
+        if(status == 1){
+          $('#update_user').hide();
+          // $('#ket_user').hide();
+          $('#filename').show();
+          $('#filename').nextAll().remove();
+          st = '<span class="text-success"> Data Valid </span>';
+          clearInterval(window.x);
+        }else{
+          
+          $('#update_user').show();
+          // $('#ket_user').show();
+          $('#filename').show();
+          $('#filename').nextAll().remove();
+          let del = `<a id="new-upload" onclick="newFile( `+id+`,'`+'public/'+path+'/'+filename+`')" class="btn btn-xs btn-warning" type="button">
+                      <i class="ace-icon fa fa-file"></i> Upload Baru
+                    </a>`;
+          $('#filename').after(del);
+          st = '<span class="text-danger"> Data Tidak Valid </span>';
+                // Mengatur waktu akhir perhitungan mundur
+          var countDownDate = new Date(duedate).getTime();
+          
+            // Memperbarui hitungan mundur setiap 1 detik
+            window.x = setInterval(function() {
+
+              // Untuk mendapatkan tanggal dan waktu hari ini
+              var now = new Date().getTime();
+                
+              // Temukan jarak antara sekarang dan tanggal hitung mundur
+              var distance = countDownDate - now;
+                
+              // Perhitungan waktu untuk hari, jam, menit dan detik
+              var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+              // Keluarkan hasil dalam elemen dengan id = "demo"
+              document.getElementById("demo").innerHTML = days + "Hari " + hours + "Jam "
+              + minutes + "Menit " + seconds + "Detik ";
+                
+              // Jika hitungan mundur selesai, tulis beberapa teks 
+              if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "Expired";
+              }
+            }, 1000);
+        }
+
+        if($('#isRole').val() == '100'){
+          $('#filename').nextAll().remove();
+        }
+
+        if(status == '3'){
+          st = '<span class="text-warning"> Mengunggu Validasi </span>';
+          $('#update_user').hide();
+          $('#filename').nextAll().remove();
+          $('#keterangan_user').replaceWith('<span id="keterangan_user" value="">'+keterangan_user+'</span>');
+          // $('#ket_admin').show();
+          // $('#ket_user').show();
+        }
+
+        $('#stat').html(st);
+
+      }else{
+        $('[name="status"]').removeAttr('checked');
+        $('#stat').html('');
+        $('#filename').nextAll().remove();
+
+        if(status == null){
+          st = '<span class="text-warning"> Mengunggu Validasi </span>';
+          $('#stat').html(st);
+          $('#keterangan').html('');
+          $('#keterangan').replaceWith('<span id="keterangan" value=""></span>');
+          $('#keterangan_user').replaceWith('<span id="keterangan_user" value=""></span>');
+          // $('#ket_admin').hide();
+          // $('#ket_user').hide();
+        }
+      }
+    }else{
+      $('#st_'+status).prop('checked', true);
+
+    }
+
   };
 
   function bytesToSize(bytes) {
@@ -410,4 +585,10 @@ function updateskor(formData){
     if (bytes == 0) return '0 Byte';
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+ }
+
+ function newFile(id, path){
+   $('#group-upload-edit').show();
+   $('#filename').nextAll().remove();
+   $('#filename').hide();
  }
