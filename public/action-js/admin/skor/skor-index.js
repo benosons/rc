@@ -229,6 +229,7 @@ function loadmaster(param){
                 { 'mDataProp': 'nama_ro'},
                 { 'mDataProp': 'nama_rc'},
                 { 'mDataProp': 'skor'},
+                { 'mDataProp': 'create_date'},
                 { 'mDataProp': 'id', 'className' : 'text-center'},
             ],
             order: [[0, 'ASC']],
@@ -266,11 +267,11 @@ function loadmaster(param){
               {
                   mRender: function ( data, type, row ) {
 
-                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
+                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
 
                       return el;
                   },
-                  aTargets: [5]
+                  aTargets: [6]
               },
             ],
           //   "drawCallback": function ( settings ) {
@@ -320,6 +321,7 @@ function loadmaster(param){
             $(table.columns(2).header()).removeAttr('rowspan');
             $(table.columns(3).header()).removeAttr('colspan');
             $(table.columns(4).header()).removeAttr('rowspan');
+            $(table.columns(5).header()).removeAttr('rowspan');
           }
           // table.clear().draw();
 
@@ -333,6 +335,7 @@ function loadmaster(param){
           $(table.columns(2).header()).attr('rowspan', 2);
           $(table.columns(3).header()).attr('colspan', 2);
           $(table.columns(4).header()).attr('rowspan', 2);
+          $(table.columns(5).header()).attr('rowspan', 2);
         }else{
           var table = $('#all-kegiatan').DataTable();
           var child = $(table.table().header()).children();
@@ -343,6 +346,7 @@ function loadmaster(param){
             $(table.columns(2).header()).removeAttr('rowspan');
             $(table.columns(3).header()).removeAttr('colspan');
             $(table.columns(4).header()).removeAttr('rowspan');
+            $(table.columns(5).header()).removeAttr('rowspan');
           }
           table.clear().draw();
         }
@@ -450,8 +454,9 @@ function updateskor(formData){
     });
   };
 
-  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate){
+  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate , createdtm){
     $('#id_master').val(id);
+    $('#tgl_upload').html(createdtm)
     if($('#isRole').val() == '200'){
       $('input#skor').replaceWith('<span>'+skor+'</span>');
       $('#keterangan').replaceWith('<span id="keterangan" value="">'+keterangan+'</span>');
