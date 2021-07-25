@@ -167,7 +167,7 @@
           <div class="form-group">
             <label class="col-lg-3 control-label no-padding-right">Upload File</label>
             <div class="col-lg-9">
-              <input id="data_upload" multiple="multiple" accept=".rar,.zip" type="file" class="file-input" data-show-caption="false" data-show-upload="false" data-browse-class="btn btn-primary btn-xs" data-remove-class="btn btn-default btn-xs">
+              <input id="data_upload" multiple="multiple" accept=".pdf" type="file" class="file-input" data-show-caption="false" data-show-upload="false" data-browse-class="btn btn-primary btn-xs" data-remove-class="btn btn-default btn-xs">
             </div>
           </div>
 
@@ -262,12 +262,34 @@
                   </div>
                 </div>
               </div>
+              
               {% else  %}
               <div class="profile-info-value">
                 <span class="editable editable-click" id="stat"><span class="label label-sm label-success arrowed-in"> Data Valid </span></span>
               </div>
               {% endif %}
             </div>
+
+            {% if role == 100 %}
+            <div class="profile-info-row" id="form-tanggal-revisi">
+              <div class="profile-info-name"> Tanggal Akhir </div>
+                <div class="profile-info-value">
+                  <div class="control-group">
+                    <div class="row">
+                      <div class="col-xs-8 col-sm-11">
+                        <!-- #section:plugins/date-time.datepicker -->
+                        <div class="input-group">
+                          <input class="form-control date-picker" id="duedate" type="text" data-date-format="dd-mm-yyyy" />
+                          <span class="input-group-addon">
+                            <i class="fa fa-calendar bigger-110"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            {% endif %}
 
             {% if role != 100 %}
             <div class="profile-info-row" id="duedate">

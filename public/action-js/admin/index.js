@@ -81,13 +81,28 @@ $(document).ready(function(){
     chart.render();
   // }else{
     var options_1 = {
-      series: [14, 23, 21, 17, 15, 10, 12, 17, 21],
+      series: [14, 23, 21, 17, 15, 10, 12, 17, 21, 10, 11],
       chart: {
       type: 'polarArea',
     },
+    
     stroke: {
       colors: ['#fff']
     },
+    labels: [
+    'Tidak ada SPAM Belum Berfungsi',
+    'Idle Capacity (< 50% dari Kapasitas Terpasang, max. 150 L/det)',
+    'Rencana Induk SPAM (RISPAM)',
+    'Studi Kelayakan/Justifikasi Teknis',
+    'Detailed Engineering Design (DED)',
+    'Rencana Anggaran Biaya (RAB)',
+    'Izin Pemanfaatan Air Baku',
+    'Sertifikat Kesiapan Lahan',
+    'Kesiapan Lembaga Pengelola',
+    'Surat Usulan Kepala Daerah',
+    'Surat Pernyataan Kepala Daerah'
+  ],
+
     fill: {
       opacity: 0.8
     },
@@ -95,7 +110,8 @@ $(document).ready(function(){
       breakpoint: 480,
       options: {
         chart: {
-          width: 200
+          width: 100,
+          
         },
         legend: {
           position: 'bottom'
@@ -107,5 +123,50 @@ $(document).ready(function(){
     var chart_1 = new ApexCharts(document.querySelector("#chart_1"), options_1);
     chart_1.render();
   // }
+
+  var options_time = {
+    series: [
+    {
+      data: [
+        {
+          x: 'Studi Kelayakan/Justifikasi Teknis',
+          y: [
+            new Date('2021-07-02').getTime(),
+            new Date('2021-07-04').getTime()
+          ]
+        },
+        {
+          x: 'Detailed Engineering Design (DED)',
+          y: [
+            new Date('2021-07-04').getTime(),
+            new Date('2021-07-08').getTime()
+          ]
+        },
+        {
+          x: 'Izin Pemanfaatan Air Baku',
+          y: [
+            new Date('2021-07-08').getTime(),
+            new Date('2021-07-12').getTime()
+          ]
+        }
+      ]
+    }
+  ],
+    chart: {
+    height: 350,
+    type: 'rangeBar'
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true
+    }
+  },
+  xaxis: {
+    type: 'datetime'
+  }
+  };
+
+  var chart_time = new ApexCharts(document.querySelector("#chart_time"), options_time);
+  chart_time.render();
   
 });

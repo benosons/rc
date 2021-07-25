@@ -5,6 +5,15 @@ $(document).ready(function(){
     // Define variables
     //
 
+    $('.date-picker').datepicker({
+      autoclose: true,
+      todayHighlight: true,
+    })
+    //show datepicker when clicking on the icon
+    .next().on(ace.click_event, function(){
+      $(this).prev().focus();
+    });
+
     // Modal template
     var modalTemplate = '<div class="modal-dialog modal-lg" role="document">\n' +
         '  <div class="modal-content">\n' +
@@ -91,6 +100,8 @@ $(document).ready(function(){
     });
   })
 
+  $('#form-tanggal-revisi').hide();
+
   $('#group-upload-edit').css('display', 'none');
 
   $('#nav-menu li').removeClass();
@@ -111,6 +122,12 @@ $(document).ready(function(){
 
   $('input[name="status"]').on('click', function(){
     $(this).attr('checked');
+    if($(this).val() == 2){
+      $('#form-tanggal-revisi').show();
+    }else{
+      $('#form-tanggal-revisi').hide();
+      $('.date-picker').val('');
+    }
   })
   // $('#all-kegiatan').DataTable();
   window.file = []
@@ -141,6 +158,8 @@ $(document).ready(function(){
       var skor = $('#skor').val();
       var keterangan = $('#keterangan').val();
       var status = $('[name="status"]:checked').val();
+
+      
       
       var formData = new FormData();
       formData.append('param', 'data_master');
@@ -148,6 +167,10 @@ $(document).ready(function(){
       formData.append('skor', skor);
       formData.append('keterangan', keterangan);
       formData.append('status', status);
+
+      if(status == '2'){
+        formData.append('duedate', $('#duedate').val());
+      }
       
       updateskor(formData);
   });
@@ -170,8 +193,13 @@ $(document).ready(function(){
     updateskor(formData);
 });
 
-  $('#data_upload').on('fileloaded', function(event, file, previewId, fileId, index, reader) {      
-      window.file.push(file);
+  $('#data_upload').on('fileloaded', function(event, file, previewId, fileId, index, reader) {  
+        
+      if(file.size < 1000)  {
+          alert();
+      }else{
+        window.file.push(file);
+      }
   });
 
   $('#data_upload_edit').on('fileloaded', function(event, file, previewId, fileId, index, reader) {      

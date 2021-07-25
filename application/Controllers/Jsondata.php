@@ -1571,6 +1571,7 @@ class Jsondata extends \CodeIgniter\Controller
 		$skor 		= $request->getVar('skor');
 		$keterangan	= $request->getVar('keterangan');
 		$status		= $request->getVar('status');
+		$duedate	= $request->getVar('duedate');
 		$keterangan_user	= $request->getVar('keterangan_user');
 		$path_delete		= $request->getVar('path_delete');
 		
@@ -1591,15 +1592,21 @@ class Jsondata extends \CodeIgniter\Controller
 			];
 
 			if($status == '2'){
-				$date = strtotime($this->now);
-				$date = strtotime("+7 day", $date);
-				$due  = date('Y-m-d H:i:s', $date);
+				// $date = strtotime($this->now);
+				// $date = strtotime("+7 day", $date);
+				// $due  = date('Y-m-d H:i:s', $date);
+				$date = strtotime($duedate);
+				$date  = date('Y-m-d', $date);
+				$time = date("H:i:s");
+				$combine = $duedate.' '.$time;
+				$dateime = strtotime($combine);
+				$due  = date('Y-m-d H:i:s', $dateime);
+				
 				$data['due_date'] = $due;
 			}else{
 				$data['due_date'] = null;
 			}
 
-			
 
 		}else{
 
