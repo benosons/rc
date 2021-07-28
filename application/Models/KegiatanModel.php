@@ -25,6 +25,7 @@ class KegiatanModel extends Model{
 
                             rc.name as nama_rc,
                             rc.code as kode_rc,
+                            rc.flag,
                             fl.filename,
                             fl.path,
                             fl.size');

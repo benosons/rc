@@ -81,6 +81,7 @@ $(document).ready(function(){
   })
 
   $('#modal_skor').on('shown.bs.modal', function (e) {
+    
     $('.file-input').fileinput({
         browseLabel: 'Pilih File',
         removeLabel: 'Hapus',
@@ -99,6 +100,7 @@ $(document).ready(function(){
         fileActionSettings: fileActionSettings
     });
   })
+
 
   $('#form-tanggal-revisi').hide();
 
@@ -155,12 +157,22 @@ $(document).ready(function(){
 
   $('#save_skor').on('click', function(){
       var id_master = $('#id_master').val();
-      var skor = $('#skor').val();
+      
       var keterangan = $('#keterangan').val();
       var status = $('[name="status"]:checked').val();
+      var skor = '';
+      var skor1 = $('#skor_flag_1').val();
+      var skor2 = $('#skor_flag_2').val();
+      var skor3 = $('#skor_flag_3').val();
 
-      
-      
+      if(skor1 != '0'){
+        skor = skor1;
+      }else if(skor2 != '0'){
+        skor = skor2;
+      }else if(skor3 != '0'){
+        skor = skor3;
+      }
+      console.log(skor);
       var formData = new FormData();
       formData.append('param', 'data_master');
       formData.append('id_master', id_master);
@@ -295,7 +307,7 @@ function loadmaster(param){
               {
                   mRender: function ( data, type, row ) {
 
-                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
+                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`',`+row.flag+`)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
 
                       return el;
                   },
@@ -482,7 +494,72 @@ function updateskor(formData){
     });
   };
 
-  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate , createdtm){
+  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate , createdtm, flag){
+    
+    if(flag == 1){
+      $("#skor_flag_1_chosen").css('display','block');
+      $("#skor_flag_2_chosen").css('display','none');
+      $("#skor_flag_3_chosen").css('display','none');
+
+      $("#skor_flag_2").val(0);
+      $("#skor_flag_3").val(0);
+
+      $("#skor_flag_2").trigger('chosen:updated');
+      $("#skor_flag_3").trigger('chosen:updated');
+
+      if(skor){
+        $("#skor_flag_1").val(skor);
+        $("#skor_flag_1").trigger('chosen:updated');
+
+        if($('#isRole').val() == '200'){
+          $("#skor_flag_1").prop('disabled', true);
+          $("#skor_flag_1").trigger('chosen:updated');
+        }
+      }
+    }else if(flag == 2){
+      $("#skor_flag_1_chosen").css('display','none');
+      $("#skor_flag_2_chosen").css('display','block');
+      $("#skor_flag_3_chosen").css('display','none');
+
+      $("#skor_flag_1").val(0);
+      $("#skor_flag_3").val(0);
+
+      $("#skor_flag_1").trigger('chosen:updated');
+      $("#skor_flag_3").trigger('chosen:updated');
+
+      if(skor){
+        $("#skor_flag_2").val(skor);
+        $("#skor_flag_2").trigger('chosen:updated');
+
+        if($('#isRole').val() == '200'){
+          $("#skor_flag_2").prop('disabled', true);
+          $("#skor_flag_2").trigger('chosen:updated');
+        }
+      }
+
+    }else if(flag == 3){
+      $("#skor_flag_1_chosen").css('display','none');
+      $("#skor_flag_2_chosen").css('display','none');
+      $("#skor_flag_3_chosen").css('display','block');
+
+      $("#skor_flag_1").val(0);
+      $("#skor_flag_2").val(0);
+
+      $("#skor_flag_1").trigger('chosen:updated');
+      $("#skor_flag_2").trigger('chosen:updated');
+
+      if(skor){
+        $("#skor_flag_3").val(skor);
+        $("#skor_flag_3").trigger('chosen:updated');
+
+        if($('#isRole').val() == '200'){
+          $("#skor_flag_3").prop('disabled', true);
+          $("#skor_flag_3").trigger('chosen:updated');
+        }
+      }
+    }
+
+
     $('#id_master').val(id);
     $('#tgl_upload').html(createdtm)
     if($('#isRole').val() == '200'){
@@ -500,6 +577,7 @@ function updateskor(formData){
     $('#delete-file').attr('href', 'public/'+path+'/'+filename);
 
     if($('#isRole').val() == '200'){
+      
         if(duedate == 'null'){
           $('#duedate').css('display', 'none');
         }else{
