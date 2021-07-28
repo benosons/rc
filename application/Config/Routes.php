@@ -104,6 +104,7 @@ $routes->post('loadusers', 'Jsondata::loadusers');
 $routes->post('loadppk', 'Jsondata::loadppk');
 $routes->post('loadprogram', 'Jsondata::loadprogram');
 $routes->post('loadkegiatan', 'Jsondata::loadkegiatan');
+$routes->post('loadkegiatandash', 'Jsondata::loadkegiatandash');
 $routes->post('loadsubkegiatan', 'Jsondata::loadsubkegiatan');
 $routes->post('loadpaket', 'Jsondata::loadpaket');
 $routes->post('loadtarget', 'Jsondata::loadtarget');
