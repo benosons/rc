@@ -106,6 +106,7 @@ $routes->post('loadprogram', 'Jsondata::loadprogram');
 $routes->post('loadkegiatan', 'Jsondata::loadkegiatan');
 $routes->post('loadkegiatandash', 'Jsondata::loadkegiatandash');
 $routes->post('checknotif', 'Jsondata::checknotif');
+$routes->post('getdashboardrc', 'Jsondata::getdashboardrc');
 
 $routes->post('loadsubkegiatan', 'Jsondata::loadsubkegiatan');
 $routes->post('loadpaket', 'Jsondata::loadpaket');

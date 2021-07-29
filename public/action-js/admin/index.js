@@ -3,8 +3,11 @@ $(document).ready(function(){
   $('#nav-menu li').removeClass();
   $('#nav-menu li#menu-dashboard').addClass('active');
 
+  $('#data-detail-rc').hide();
+  $('#data-detail-duedate').hide();
   if($('#isRole').val() != '100'){
     loadmaster()
+    getrc()
   }
 
     var options = {
@@ -18,6 +21,7 @@ $(document).ready(function(){
           dataPointSelection: (event, chartContext, config) => {
             let kab = parseInt(config.dataPointIndex) + 1;
             loadmaster(kab);
+            getrc(kab)
           }
         }
       },
@@ -89,91 +93,7 @@ $(document).ready(function(){
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
   // }else{
-    var options_1 = {
-      series: [{
-      data: [25, 25, 10, 5, 5, 5, 5, 5, 5, 5, 5]
-    }],
-      chart: {
-      type: 'bar',
-      height: 380
-    },
-    plotOptions: {
-      bar: {
-        barHeight: '100%',
-        distributed: true,
-        horizontal: true,
-        dataLabels: {
-          position: 'bottom'
-        },
-      }
-    },
-    colors: ['#33b2df', '#33b2df', '#d4526e', '#f48024', '#f48024', '#f48024', '#f48024', '#f48024',
-      '#f48024', '#f48024', '#f48024'
-    ],
-    dataLabels: {
-      enabled: true,
-      textAnchor: 'start',
-      style: {
-        colors: ['#fff']
-      },
-      formatter: function (val, opt) {
-        return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
-      },
-      offsetX: 0,
-      dropShadow: {
-        enabled: true
-      }
-    },
-    stroke: {
-      width: 1,
-      colors: ['#fff']
-    },
-    xaxis: {
-      categories: [
-        'Tidak ada SPAM Belum Berfungsi',
-        'Idle Capacity (< 50% dari Kapasitas Terpasang, max. 150 L/det)',
-        'Rencana Induk SPAM (RISPAM)',
-        'Studi Kelayakan/Justifikasi Teknis',
-        'Detailed Engineering Design (DED)',
-        'Rencana Anggaran Biaya (RAB)',
-        'Izin Pemanfaatan Air Baku',
-        'Sertifikat Kesiapan Lahan',
-        'Kesiapan Lembaga Pengelola',
-        'Surat Usulan Kepala Daerah',
-        'Surat Pernyataan Kepala Daerah'
-      ],
-    },
-    yaxis: {
-      labels: {
-        show: false
-      }
-    },
-    title: {
-        text: 'Total Detail RC',
-        align: 'center',
-        floating: true
-    },
-    subtitle: {
-        text: 'Data Detail RC',
-        align: 'center',
-    },
-    tooltip: {
-      theme: 'dark',
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: function () {
-            return ''
-          }
-        }
-      }
-    }
-    };
-
-    var chart_1 = new ApexCharts(document.querySelector("#chart_1"), options_1);
-    chart_1.render();
+    
   // }
 
   var options_time = {
@@ -224,6 +144,7 @@ $(document).ready(function(){
 });
 
 function loadmaster(param){
+  $('#data-detail-duedate').show();
   $([document.documentElement, document.body]).animate({
     scrollTop: $("#all-kegiatan").offset().top
 }, 2000);
@@ -361,4 +282,115 @@ function loadmaster(param){
           document.getElementById("demo"+id).innerHTML = "Expired";
         }
       }, 1000);
+    }
+
+    function getrc(param){
+      $('#data-detail-rc').show();
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: "getdashboardrc",
+        data : {
+          param      : param,
+        },
+        success: function(result){
+          let categ = [];
+          let skor = [];
+          let col = [];
+          for (let index = 0; index < result.data.length; index++) {
+            categ.push(result.data[index]['nama_rc']);
+            skor.push(result.data[index]['skor']);
+
+            switch (result.data[index]['flag']) {
+              case '1':
+                col.push('#33b2df');
+                break;
+              case '2':
+                col.push('#d4526e');
+                break;
+              case '3':
+                col.push('#f48024');
+                break;
+            
+              default:
+                break;
+            }
+            
+          }
+
+          console.log(result.data);
+          var options_1 = {
+            series: [{
+            data: skor
+          }],
+            chart: {
+            type: 'bar',
+            height: 380
+          },
+          plotOptions: {
+            bar: {
+              barHeight: '100%',
+              distributed: true,
+              horizontal: true,
+              dataLabels: {
+                position: 'bottom'
+              },
+            }
+          },
+          colors: col,
+          dataLabels: {
+            enabled: true,
+            textAnchor: 'start',
+            style: {
+              colors: ['#fff']
+            },
+            formatter: function (val, opt) {
+              return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+            },
+            offsetX: 0,
+            dropShadow: {
+              enabled: true
+            }
+          },
+          stroke: {
+            width: 1,
+            colors: ['#fff']
+          },
+          xaxis: {
+            categories: categ,
+          },
+          yaxis: {
+            labels: {
+              show: false
+            }
+          },
+          title: {
+              text: 'Total Detail RC',
+              align: 'center',
+              floating: true
+          },
+          subtitle: {
+              text: 'Data Detail RC',
+              align: 'center',
+          },
+          tooltip: {
+            theme: 'dark',
+            x: {
+              show: false
+            },
+            y: {
+              title: {
+                formatter: function () {
+                  return ''
+                }
+              }
+            }
+          }
+          };
+      
+          var chart_1 = new ApexCharts(document.querySelector("#chart_1"), options_1);
+          chart_1.render();
+  
+        }
+      });
     }

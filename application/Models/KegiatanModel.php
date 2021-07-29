@@ -119,4 +119,43 @@ class KegiatanModel extends Model{
           return  $query->getResult();
     }
 
+    public function getdashrc($code = null, $userid = null, $kota = null)
+    {
+        
+          $builder = $this->db->table('data_master mas');
+          $builder->select('mas.*, 
+                            ke.name as nama_kegiatan, 
+                            ke.code as kode_kegiatan, 
+                            
+                            kr.name as nama_kro,
+                            kr.code as kode_kro,
+
+                            ro.name as nama_ro,
+                            ro.code as kode_ro,
+
+                            rc.name as nama_rc,
+                            rc.code as kode_rc,
+                            fl.filename,
+                            fl.path,
+                            fl.size,
+                            rc.flag');
+
+          $builder->join('data_kegiatan ke', 'ke.id = mas.id_kegiatan');
+          $builder->join('data_kro kr', 'kr.id = mas.id_kro');
+          $builder->join('data_ro ro', 'ro.id = mas.id_ro');
+          $builder->join('data_rc rc', 'rc.id = mas.id_rc');
+          $builder->join('data_file fl', 'fl.id_parent = mas.id');
+          
+          if($code == 'user'){
+            $query   = $builder->getWhere(['mas.create_by' => $userid]);
+          }else if($code == 'admin'){
+            $query   = $builder->getWhere(['kabupaten_kota' => $kota]);
+          }else{
+            $query   = $builder->get();
+          }
+                    // echo $this->db->getLastQuery();die;
+
+          return  $query->getResult();
+    }
+
 }
