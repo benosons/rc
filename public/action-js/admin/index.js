@@ -8,90 +8,12 @@ $(document).ready(function(){
   if($('#isRole').val() != '100'){
     loadmaster()
     getrc()
+    
+  }else{
+    getkab();
   }
 
-    var options = {
-      series: [{
-      data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380, 1400, 1401, 1459, 1567, 1678]
-    }],
-      chart: {
-      type: 'bar',
-      height: 380,
-      events: {
-          dataPointSelection: (event, chartContext, config) => {
-            let kab = parseInt(config.dataPointIndex) + 1;
-            loadmaster(kab);
-            getrc(kab)
-          }
-        }
-      },
-    plotOptions: {
-      bar: {
-        barHeight: '100%',
-        distributed: true,
-        horizontal: true,
-        dataLabels: {
-          position: 'bottom'
-        },
-      }
-    },
-    colors: ['#33b2df', '#546E7A', '#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4', '#90ee7e',
-      '#f48024', '#69d2e7', '#33b2df', '#546E7A', '#d4526e', '#13d8aa', '#A5978B',
-    ],
-    dataLabels: {
-      enabled: true,
-      textAnchor: 'start',
-      style: {
-        colors: ['#fff']
-      },
-      formatter: function (val, opt) {
-        return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
-      },
-      offsetX: 0,
-      dropShadow: {
-        enabled: true
-      }
-    },
-    stroke: {
-      width: 1,
-      colors: ['#fff']
-    },
-    xaxis: {
-      categories: [
-        'Kabupaten Lampung Barat','Kabupaten Tanggamus','Kabupaten Lampung Selatan ','Kabupaten Lampung Timur ','Kabupaten Lampung Tengah','Kabupaten Lampung Utara','Kabupaten Way Kanan','Kabupaten Tulang Bawang ','Kabupaten Pesawaran','Kabupaten Pringsewu ','Kabupaten Mesuji','Kabupaten Tulang Bawang Barat ','Kabupaten Pesisir Barat','Kota Bandar Lampung ','Kota Metro ',
-      ],
-    },
-    yaxis: {
-      labels: {
-        show: false
-      }
-    },
-    title: {
-        text: 'Total Skor kabupaten Kota',
-        align: 'center',
-        floating: true
-    },
-    subtitle: {
-        text: 'Data Skor Kabupaten Kota',
-        align: 'center',
-    },
-    tooltip: {
-      theme: 'dark',
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: function () {
-            return ''
-          }
-        }
-      }
-    }
-    };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
   // }else{
     
   // }
@@ -387,10 +309,116 @@ function loadmaster(param){
             }
           }
           };
-      
+
+          var elementExists = document.getElementById("chart_1");
+          if(elementExists){
+            $('#chart_1 > div').remove();
+          }
           var chart_1 = new ApexCharts(document.querySelector("#chart_1"), options_1);
           chart_1.render();
   
         }
       });
+    }
+
+    function getkab(param){
+      $('#data-detail-rc').show();
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: "kabupatendash",
+        data : {
+          param      : param,
+        },
+        success: function(result){
+          console.log(result.data);
+          let categor = [];
+          let skore = [];
+          for (let index = 0; index < result.data.length; index++) {
+            categor.push(result.data[index]['name']);
+            skore.push(result.data[index]['skor']);
+            
+          }
+          var options = {
+            series: [{
+            data: skore
+          }],
+            chart: {
+            type: 'bar',
+            height: 380,
+            events: {
+                dataPointSelection: (event, chartContext, config) => {
+                  let kab = parseInt(config.dataPointIndex) + 1;
+                  loadmaster(kab);
+                  getrc(kab)
+                }
+              }
+            },
+          plotOptions: {
+            bar: {
+              barHeight: '100%',
+              distributed: true,
+              horizontal: true,
+              dataLabels: {
+                position: 'bottom'
+              },
+            }
+          },
+          colors: ['#33b2df', '#546E7A', '#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4', '#90ee7e',
+            '#f48024', '#69d2e7', '#33b2df', '#546E7A', '#d4526e', '#13d8aa', '#A5978B',
+          ],
+          dataLabels: {
+            enabled: true,
+            textAnchor: 'start',
+            style: {
+              colors: ['#fff']
+            },
+            formatter: function (val, opt) {
+              return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+            },
+            offsetX: 0,
+            dropShadow: {
+              enabled: true
+            }
+          },
+          stroke: {
+            width: 1,
+            colors: ['#fff']
+          },
+          xaxis: {
+            categories: categor,
+          },
+          yaxis: {
+            labels: {
+              show: false
+            }
+          },
+          title: {
+              text: 'Total Skor kabupaten Kota',
+              align: 'center',
+              floating: true
+          },
+          subtitle: {
+              text: 'Data Skor Kabupaten Kota',
+              align: 'center',
+          },
+          tooltip: {
+            theme: 'dark',
+            x: {
+              show: false
+            },
+            y: {
+              title: {
+                formatter: function () {
+                  return ''
+                }
+              }
+            }
+          }
+          };
+          
+          var chart = new ApexCharts(document.querySelector("#chart"), options);
+          chart.render();
+        }
+      })
     }

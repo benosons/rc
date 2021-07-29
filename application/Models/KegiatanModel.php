@@ -158,4 +158,26 @@ class KegiatanModel extends Model{
           return  $query->getResult();
     }
 
+    public function kabupatendash($code = null, $userid = null, $kota = null)
+    {
+        
+          $builder = $this->db->table('kabupaten_kota kk ');
+          $builder->select('name, sum(IF(skor is null , 0, CONVERT(skor,UNSIGNED INTEGER))) as skor');
+          $builder->join('data_master dm', 'dm.kabupaten_kota = kk.id');
+          
+          if($code == 'user'){
+            $builder->getWhere(['kabupaten_kota' => $kota, 'mas.create_by' => $userid]);
+            $query = $builder->groupBy("name");
+          }else if($code == 'admin'){
+            $builder->groupBy("name");
+            $query = $builder->get();
+          }else{
+            $builder->get();
+            $query = $builder->groupBy("name");
+          }
+                    // echo $this->db->getLastQuery();die;
+
+          return  $query->getResult();
+    }
+
 }

@@ -595,6 +595,58 @@ class Jsondata extends \CodeIgniter\Controller
 		}
 	}
 
+	public function kabupatendash()
+	{
+		try
+		{
+				$request  = $this->request;
+				$param 	  = $request->getVar('param');
+				$id		  = $request->getVar('id');
+				$role 		= $this->data['role'];
+				$userid		= $this->data['userid'];
+				$code 		= $request->getVar('code');
+				
+				if($role == '200'){
+					$code = 'user';
+					$kota = $this->data['kabupaten_kota'];
+				}else{
+					$code 		= 'admin';
+					$kota 		= $param;
+					$userid		= null;
+				}
+
+				
+					$model = new \App\Models\KegiatanModel();
+					$modelparam = new \App\Models\ParamModel();
+					$modelfiles = new \App\Models\FilesModel();
+
+						$fulldata = [];
+						$datakegiatan = $model->kabupatendash($code, $userid, $kota);
+
+					if($datakegiatan){
+						$response = [
+							'status'   => 'sukses',
+							'code'     => '1',
+							'data' 		 => $datakegiatan
+						];
+					}else{
+						$response = [
+						    'status'   => 'gagal',
+						    'code'     => '0',
+						    'data'     => 'tidak ada data',
+						];
+					}
+
+				header('Content-Type: application/json');
+				echo json_encode($response);
+				exit;
+			}
+		catch (\Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+
 	public function loadsubkegiatan()
 	{
 		try

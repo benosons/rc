@@ -11,6 +11,7 @@ class ParamModel extends Model{
 
     public function getparam($table = null, $id = null, $kota = null)
     {
+          
           $builder = $this->db->table($table);
           if($id){
             if($table == 'data_rc'){
@@ -21,6 +22,8 @@ class ParamModel extends Model{
           }else{
             if($table == 'kabupaten_kota'){
               $builder->where('id in (select kabupaten_kota from data_master where kabupaten_kota = kabupaten_kota.id)');
+            }else if($table == 'data_rc'){
+              $builder->where('id not in (select id_rc from data_master where id_rc = data_rc.id)');
             }
             $query   = $builder->get();
           }
