@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  
   $('.chosen-select').chosen({allow_single_deselect:true});
   $(window)
 					.off('resize.chosen')
@@ -43,6 +44,11 @@ $(document).ready(function(){
   if($('#session_satuan').val()){
     loadmenu('satuan', $('#session_satuan').val());
   }
+
+  checknotif();
+  setInterval(() => {
+    checknotif();
+  }, 10000);
 });
 
 function loadmenu(param, id){
@@ -96,3 +102,18 @@ $.ajax({
         $(this).removeClass(type + ' animated');
     });
   };
+
+  function checknotif(){
+    $.ajax({
+      type: 'post',
+      dataType: 'json',
+      url: "checknotif",
+      success: function(result){
+        console.log(result.data[0].total);
+          $('#ini-notif').html(result.data[0].total)
+          $('#ini-notif-1').html(result.data[0].total)
+          $('#notif-detail').html('<i class="ace-icon fa fa-exclamation-triangle" ></i>'+result.data[0].total +' Notifikasi')
+
+      }
+    });
+  }

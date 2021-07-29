@@ -101,4 +101,22 @@ class KegiatanModel extends Model{
       return true;
     }
 
+    public function checknotif($code = null, $userid = null, $kota = null)
+    {
+        
+          $builder = $this->db->table('data_master mas');
+          $builder->select('count(*) as total');
+          
+          if($code == 'user'){
+            $query   = $builder->getWhere(['status' => '2', 'mas.create_by' => $userid]);
+          }else if($code == 'admin'){
+            $query   = $builder->getWhere(['status' => '2', 'kabupaten_kota' => $kota]);
+          }else{
+            $query   = $builder->get();
+          }
+                    // echo $this->db->getLastQuery();die;
+
+          return  $query->getResult();
+    }
+
 }

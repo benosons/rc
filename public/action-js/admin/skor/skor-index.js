@@ -101,6 +101,14 @@ $(document).ready(function(){
     });
   })
 
+  $('#modal_skor').on('hidden.bs.modal', function (e) {
+    $('#update_user').prop('disabled', false)
+  })
+
+  $('#modal_kegiatan').on('hidden.bs.modal', function (e) {
+    $('.fileinput-remove').trigger('click');
+    $('#save_kegiatan').prop('disabled', false)
+  })
 
   $('#form-tanggal-revisi').hide();
 
@@ -207,19 +215,28 @@ $(document).ready(function(){
 
   $('#data_upload').on('fileloaded', function(event, file, previewId, fileId, index, reader) {  
         
-      if(file.size < 1000)  {
-          alert();
+      if(file.size < '100000')  {
+          $('.kv-fileinput-error').html('<b class="text-danger">File harus lebih besar dari 100 KB.<b>');
+          $('.kv-fileinput-error').css({display: 'block'});
+          $('#save_kegiatan').prop('disabled', true)
       }else{
         window.file.push(file);
       }
   });
 
   $('#data_upload_edit').on('fileloaded', function(event, file, previewId, fileId, index, reader) {      
-    window.file_edit.push(file);
+    if(file.size < '100000')  {
+      $('.kv-fileinput-error').html('<b class="text-danger">File harus lebih besar dari 100 KB.<b>');
+      $('.kv-fileinput-error').css({display: 'block'});
+      $('#update_user').prop('disabled', true)
+    }else{
+      window.file_edit.push(file);
+    }
   });
 
   $('#data_upload').on('filecleared', function(event) {
       window.file = [];
+      $('#save_kegiatan').prop('disabled', false)
   });
   $('#data_upload_edit').on('filecleared', function(event) {
       window.file_edit = [];
