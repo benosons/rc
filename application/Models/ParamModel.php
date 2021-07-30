@@ -9,7 +9,7 @@ class ParamModel extends Model{
           return  $this->select(['data_berita.*', 'users.user_id', 'users.user_name', 'users.user_email', 'users.user_role', 'users.user_fullname'])->join('users','users.user_id = data_berita.create_by')->getWhere(['create_by' => $create_by])->getResult();
     }
 
-    public function getparam($table = null, $id = null, $kota = null)
+    public function getparam($table = null, $id = null, $kota = null, $userid = null)
     {
           
           $builder = $this->db->table($table);
@@ -23,7 +23,7 @@ class ParamModel extends Model{
             if($table == 'kabupaten_kota'){
               $builder->where('id in (select kabupaten_kota from data_master where kabupaten_kota = kabupaten_kota.id)');
             }else if($table == 'data_rc'){
-              $builder->where('id not in (select id_rc from data_master where id_rc = data_rc.id)');
+              $builder->where('id not in (select id_rc from data_master where id_rc = data_rc.id and create_by = '.$userid.')' );
             }
             $query   = $builder->get();
           }
