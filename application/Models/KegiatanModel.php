@@ -110,7 +110,7 @@ class KegiatanModel extends Model{
           if($code == 'user'){
             $query   = $builder->getWhere(['status' => '2', 'mas.create_by' => $userid]);
           }else if($code == 'admin'){
-            $query   = $builder->getWhere(['status' => '2', 'kabupaten_kota' => $kota]);
+            $query   = $builder->getWhere(['status' => '2']);
           }else{
             $query   = $builder->get();
           }
