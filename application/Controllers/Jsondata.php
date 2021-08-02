@@ -1855,6 +1855,48 @@ class Jsondata extends \CodeIgniter\Controller
 
 						$modelfiles->updateFile($id, $data_file);
 					}
+				}else{
+					if (!is_dir($folder)) {
+						mkdir($folder, 0777, TRUE);
+					}
+
+					foreach($files as $idx => $fl){
+									
+						$stat = $fl->move($folder, $fl->getName());
+						
+						$data_file = [
+							'id_parent' => $id,
+							'filename' => $fl->getName(),
+							'type' => null,
+							'size' => $fl->getSize(),
+							'path' => $tipe.'/'.$date.'/'.$userid,
+							'create_date' => $this->now,
+							'create_by' => $userid
+						];
+
+						$modelfiles->updateFile($id, $data_file);
+					}
+				}
+			}else{
+				if (!is_dir($folder)) {
+					mkdir($folder, 0777, TRUE);
+				}
+
+				foreach($files as $idx => $fl){
+								
+					$stat = $fl->move($folder, $fl->getName());
+					
+					$data_file = [
+						'id_parent' => $id,
+						'filename' => $fl->getName(),
+						'type' => null,
+						'size' => $fl->getSize(),
+						'path' => $tipe.'/'.$date.'/'.$userid,
+						'create_date' => $this->now,
+						'create_by' => $userid
+					];
+
+					$modelfiles->updateFile($id, $data_file);
 				}
 			}
 		}
