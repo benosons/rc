@@ -717,8 +717,50 @@ function updateskor(formData){
         }
       }
     }else{
-      $('#st_'+status).prop('checked', true);
+      if(status == 1){
+       $('#st_'+status).prop('checked', true);
+       $('#st_1').prop('disabled', true);
+       $('#st_2').prop('disabled', true);
+       $('#keterangan').prop('disabled', true);
+       $('#keterangan_user').prop('disabled', true);
 
+
+        $("#skor_flag_1").prop('disabled', true);
+        $("#skor_flag_1").trigger('chosen:updated');
+        $("#skor_flag_2").prop('disabled', true);
+        $("#skor_flag_2").trigger('chosen:updated');
+        $("#skor_flag_3").prop('disabled', true);
+        $("#skor_flag_3").trigger('chosen:updated');
+      }else if(status == 2){
+        $('#st_'+status).prop('checked', false);
+        $('#st_1').prop('disabled', false);
+        $('#st_2').prop('disabled', false);
+        $('#keterangan').prop('disabled', false);
+        $('#keterangan_user').prop('disabled', true);
+
+ 
+         $("#skor_flag_1").prop('disabled', false);
+         $("#skor_flag_1").trigger('chosen:updated');
+         $("#skor_flag_2").prop('disabled', false);
+         $("#skor_flag_2").trigger('chosen:updated');
+         $("#skor_flag_3").prop('disabled', false);
+         $("#skor_flag_3").trigger('chosen:updated');
+      }else{
+        $('#st_1').prop('checked', false);
+        $('#st_2').prop('checked', false);
+        $('#st_1').prop('disabled', false);
+        $('#st_2').prop('disabled', false);
+
+        $('#keterangan').prop('disabled', false);
+
+        $("#skor_flag_1").prop('disabled', false);
+        $("#skor_flag_1").trigger('chosen:updated');
+        $("#skor_flag_2").prop('disabled', false);
+        $("#skor_flag_2").trigger('chosen:updated');
+        $("#skor_flag_3").prop('disabled', false);
+        $("#skor_flag_3").trigger('chosen:updated');
+      }
+      
     }
 
   };
