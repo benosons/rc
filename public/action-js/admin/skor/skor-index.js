@@ -613,10 +613,25 @@ function updateskor(formData){
       }else{
         $('#ket_admin').show();
       }
-
+      
       if(keterangan_user == 'null' || keterangan_user == null || keterangan_user == '' ){
         $('#ket_user').css('display', 'none');
       }else{
+        $('#ket_user').show();
+      }
+    }else{
+      
+      if( keterangan == 'null' || keterangan == '' || keterangan == null ){
+        
+        $('#ket_admin').css('display', 'none');
+      }else{
+        $('#ket_admin').show();
+      }
+      
+      if(keterangan_user == 'null' || keterangan_user == null || keterangan_user == '' ){
+        $('#ket_user').css('display', 'none');
+      }else{
+        $('#keterangan_user').html(keterangan_user);
         $('#ket_user').show();
       }
     }
