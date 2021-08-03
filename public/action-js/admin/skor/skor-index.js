@@ -287,6 +287,7 @@ function loadmaster(param){
                 { 'mDataProp': 'nama_rc'},
                 { 'mDataProp': 'skor'},
                 { 'mDataProp': 'create_date'},
+                { 'mDataProp': 'status'},
                 { 'mDataProp': 'id', 'className' : 'text-center'},
             ],
             order: [[0, 'ASC']],
@@ -322,13 +323,37 @@ function loadmaster(param){
                 aTargets: [2]
             },
               {
+                mRender: function ( data, type, row ) {
+
+                  var el = '';
+                  switch (data) {
+                    case '1':
+                      el = '<span class="label label-success arrowed">valid</span>'
+                      break;
+                    case '3':
+                      el = '<span class="label label-danger arrowed">tidak valid</span>'
+                      break;
+                    case '3':
+                      el =  '<span class="label label-warning arrowed">menunggu validasi</span>'
+                      break;
+                  
+                    default:
+                      el =  '<span class="label label-warning arrowed">menunggu validasi</span>'
+                      break;
+                  }
+
+                    return el;
+                },
+                aTargets: [6]
+            },
+              {
                   mRender: function ( data, type, row ) {
 
                     var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`',`+row.flag+`)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
 
                       return el;
                   },
-                  aTargets: [6]
+                  aTargets: [7]
               },
             ],
           //   "drawCallback": function ( settings ) {
