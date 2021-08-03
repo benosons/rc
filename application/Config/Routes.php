@@ -127,6 +127,7 @@ $routes->post('addKegiatan', 'Jsondata::addKegiatan');
 $routes->post('addTarget', 'Jsondata::addTarget');
 $routes->post('addRealisasi', 'Jsondata::addRealisasi');
 $routes->post('udpateSkor', 'Jsondata::udpateSkor');
+$routes->post('deletekegiatan', 'Jsondata::deletekegiatan');
 
 
 

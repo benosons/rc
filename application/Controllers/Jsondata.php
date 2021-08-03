@@ -2861,4 +2861,27 @@ class Jsondata extends \CodeIgniter\Controller
 		}
 	}
 
+	public function deletekegiatan(){
+
+		$request  = $this->request;
+		$id 	  	= $request->getVar('id');
+		$role 		= $this->data['role'];
+		$userid		= $this->data['userid'];
+
+		$model 	  = new \App\Models\KegiatanModel();
+		
+		$chekfile = $model->checkfile($id);
+		$res = $model->deleteya($id);
+		
+		$response = [
+				'status'   => 'sukses',
+				'code'     => '0',
+				'data' 		 => 'terupdate'
+		];
+		header('Content-Type: application/json');
+		echo json_encode($response);
+		exit;
+
+	}
+
 }

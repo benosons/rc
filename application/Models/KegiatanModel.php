@@ -180,4 +180,34 @@ class KegiatanModel extends Model{
           return  $query->getResult();
     }
 
+    public function deleteya($id = null){
+
+
+      $builder1 = $this->db->table('data_master');
+      $query1   = $builder1->where('id', $id);
+      $query1->delete();
+
+      $builder2 = $this->db->table('data_file');
+      $query2   = $builder1->where('id_parent', $id);
+      $query2->delete();
+      
+      return true;
+
+    }
+
+    public function checkfile($id = null){
+      
+      $builder = $this->db->table('data_file');
+      $query   = $builder->getWhere(['id_parent' => $id]);
+      $res = $query->getResult();
+      $path_delete = 'public/'.$res[0]->path.'/'.$res[0]->filename;
+      
+      if(file_exists($path_delete)){
+        unlink($path_delete);
+      }
+      
+      return true;
+
+    }
+
 }

@@ -350,7 +350,9 @@ function loadmaster(param){
                   mRender: function ( data, type, row ) {
 
                     var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`',`+row.flag+`)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
-
+                    if($('#isRole').val() == '200'){
+                      el += `<button onclick="deleteya(`+row.id+`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>`;
+                    }
                       return el;
                   },
                   aTargets: [7]
@@ -802,3 +804,49 @@ function updateskor(formData){
    $('#filename').nextAll().remove();
    $('#filename').hide();
  }
+
+ function deleteya(id){
+      bootbox.confirm({
+        message: "Yakin <b>Hapus</b> data kegiatan ini ?",
+        buttons: {
+        confirm: {
+            label: '<i class="fa fa-check"></i> Yes',
+            className: 'btn-success btn-xs',
+        },
+        cancel: {
+            label: '<i class="fa fa-times"></i> No',
+            className: 'btn-danger btn-xs',
+        }
+      },
+        callback : function(result) {
+        if(result) {
+            isDelete(id);
+          }
+        }
+    });
+ }
+
+ function isDelete(id){
+  var formData = new FormData();
+      formData.append('id', id);
+  $.ajax({
+      type: 'post',
+      processData: false,
+      contentType: false,
+      url: 'deletekegiatan',
+      data : formData,
+      success: function(result){
+        Swal.fire({
+          type: 'success',
+          title: 'Data Terhapus !',
+          showConfirmButton: true,
+          // showCancelButton: true,
+          confirmButtonText: `Ok`,
+        }).then((result) => {
+          $(document).ready(function(){
+            location.reload();
+          });
+        })
+      }
+    });
+  };
