@@ -1729,6 +1729,7 @@ class Jsondata extends \CodeIgniter\Controller
 					'id_kro' 		=> $request->getVar('id_kro'),
 					'id_ro' 		=> $request->getVar('id_ro'),
 					'id_rc' 		=> $request->getVar('id_rc'),
+					'judul_kegiatan'=> $request->getVar('judul_kegiatan'),
 					'create_date'	=> $this->now,
 					'create_by'		=> $userid,
 					'update_date'	=> $this->now,

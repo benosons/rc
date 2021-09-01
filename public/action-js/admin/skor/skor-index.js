@@ -148,6 +148,7 @@ $(document).ready(function(){
       var id_kro = $('#data_kro').val();
       var id_ro = $('#data_ro').val();
       var id_rc = $('#data_rc').val();
+      var judul_kegiatan = $('#judul_kegiatan').val();
 
       var formData = new FormData();
       formData.append('param', 'data_master');
@@ -155,6 +156,7 @@ $(document).ready(function(){
       formData.append('id_kro', id_kro);
       formData.append('id_ro', id_ro);
       formData.append('id_rc', id_rc);
+      formData.append('judul_kegiatan', judul_kegiatan);
 
       for (let i = 0; i < window.file.length; i++) {
         formData.append('file[]', window.file[i]);
@@ -330,7 +332,7 @@ function loadmaster(param){
                     case '1':
                       el = '<span class="label label-success arrowed">valid</span>'
                       break;
-                    case '3':
+                    case '2':
                       el = '<span class="label label-danger arrowed">tidak valid</span>'
                       break;
                     case '3':
@@ -349,7 +351,7 @@ function loadmaster(param){
               {
                   mRender: function ( data, type, row ) {
 
-                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`',`+row.flag+`)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
+                    var el = `<button onclick="skor(`+row.id+`,'`+row.skor+`','`+row.filename+`','`+row.path+`','`+row.size+`','`+row.keterangan+`','`+row.keterangan_user+`',`+row.status+`, '`+row.due_date+`','`+row.create_date+`',`+row.flag+`,'`+row.judul_kegiatan+`')" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_skor"><i class="fa fa-edit"></i></button>`;
                     if($('#isRole').val() == '200'){
                       el += `<button onclick="deleteya(`+row.id+`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>`;
                     }
@@ -406,6 +408,7 @@ function loadmaster(param){
             $(table.columns(3).header()).removeAttr('colspan');
             $(table.columns(4).header()).removeAttr('rowspan');
             $(table.columns(5).header()).removeAttr('rowspan');
+            $(table.columns(6).header()).removeAttr('rowspan');
           }
           // table.clear().draw();
 
@@ -420,6 +423,7 @@ function loadmaster(param){
           $(table.columns(3).header()).attr('colspan', 2);
           $(table.columns(4).header()).attr('rowspan', 2);
           $(table.columns(5).header()).attr('rowspan', 2);
+          $(table.columns(6).header()).attr('rowspan', 2);
         }else{
           var table = $('#all-kegiatan').DataTable();
           var child = $(table.table().header()).children();
@@ -431,6 +435,7 @@ function loadmaster(param){
             $(table.columns(3).header()).removeAttr('colspan');
             $(table.columns(4).header()).removeAttr('rowspan');
             $(table.columns(5).header()).removeAttr('rowspan');
+            $(table.columns(6).header()).removeAttr('rowspan');
           }
           table.clear().draw();
         }
@@ -538,7 +543,7 @@ function updateskor(formData){
     });
   };
 
-  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate , createdtm, flag){
+  function skor(id, skor,  filename, path, size, keterangan, keterangan_user, status, duedate , createdtm, flag, judul){
     
     if(flag == 1){
       $("#skor_flag_1_chosen").css('display','block');
@@ -606,6 +611,7 @@ function updateskor(formData){
 
     $('#id_master').val(id);
     $('#tgl_upload').html(createdtm)
+    $('#ini_judul').html('<b>'+judul+'</b>')
     if($('#isRole').val() == '200'){
       $('input#skor').replaceWith('<span>'+skor+'</span>');
       $('#keterangan').replaceWith('<span id="keterangan" value="">'+keterangan+'</span>');

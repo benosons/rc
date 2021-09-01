@@ -97,6 +97,7 @@ function loadmaster(param){
             aoColumns: [
                 { 'mDataProp': 'nama_ro'},
                 { 'mDataProp': 'nama_rc'},
+                { 'mDataProp': 'judul_kegiatan'},
                 { 'mDataProp': 'skor'},
                 { 'mDataProp': 'due_date'},
                 { 'mDataProp': 'due_date'},
@@ -124,7 +125,7 @@ function loadmaster(param){
 
                     return el;
                 },
-                aTargets: [4]
+                aTargets: [5]
               },
             ],
           //   "drawCallback": function ( settings ) {
@@ -287,7 +288,7 @@ function loadmaster(param){
             }
           },
           title: {
-              text: 'Total Detail RC',
+              text: 'Total Skore RC per Kegiatan',
               align: 'center',
               floating: true
           },
